@@ -28,7 +28,7 @@
       "url": "https://github.com/thedumbterminal/jsonschema-avro/blob/master/LICENSE"
     }
   ],
-  "homepage": "https://github.com/thedumbterminal/jsonschema-avro#readme",
+  "homepage": "https://github.com/intempt/json-to-avro-schema#readme",
   "keywords": [
     "json-schema",
     "jsonschema",

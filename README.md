@@ -1,35 +1,22 @@
-# jsonschema-avro
-
-[![npm](https://img.shields.io/npm/v/jsonschema-avro.svg)](https://www.npmjs.com/package/jsonschema-avro)
-[![Build Status](https://travis-ci.org/thedumbterminal/jsonschema-avro.svg?branch=master)](https://travis-ci.org/thedumbterminal/jsonschema-avro)
+# JSON to AVRO schema
 
 Converts JSON-schema definitions into Avro definitions.
 
 ## Install
+To run converter you need to have `npm` and `node` installed, and also need
+to install all dependencies using npm:
 
-    npm install jsonschema-avro
+`npm install url chalk figlet fs yargs`
 
-## Consume
+After installation all dependencies you can install CLI tool using with administrator rights:
 
-    const jsonSchemaAvro = require('jsonschema-avro')
-    
-    const inJson = {
-    	"description": "Example description",
-    	"type": "object",
-    	"properties": {
-    		"first_name": { "type": "string" },
-    		"address": {
-    			"type": "object",
-    			"properties": {
-    				"street_address": { "type": "string" }
-    			}
-    		}
-    	}
-    }
-    
-    const avro = jsonSchemaAvro.convert(inJson)
+`npm install -g`
 
-Please ensure that the input JSON schema is dereferenced so that all external references have been resolved. [json-schema-ref-parser](https://www.npmjs.com/package/json-schema-ref-parser) can do this, prior to using this module.
+# Using tool
+
+To run json to avro schema converter use next command:
+
+`json-to-avro -j example.json -a avro.json`
 
 ## Test
 

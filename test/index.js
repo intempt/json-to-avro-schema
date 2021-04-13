@@ -1,4 +1,4 @@
-const jsonSchemaAvro = require('../src/index')
+const jsonSchemaAvro = require('../src/converter')
 const assert = require('assert')
 const fs = require('fs')
 

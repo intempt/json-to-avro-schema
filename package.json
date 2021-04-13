@@ -1,31 +1,27 @@
 {
-  "name": "jsonschema-avro",
-  "version": "1.6.0",
-  "description": "Convert JSON-schema into avro schema",
-  "main": "src/index.js",
+  "name": "build",
+  "version": "1.0.0",
+  "bin": {
+    "json-to-avro": "./src/index.js"
+  },
   "scripts": {
     "ci": "npm run lint && npm test",
     "lint": "eslint .",
     "test": "mocha test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thedumbterminal/jsonschema-avro.git"
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "figlet": "^1.5.0",
+    "fs": "*",
+    "url": "^0.11.0",
+    "yargs": "^16.2.0"
   },
-  "keywords": [
-    "json-schema",
-    "jsonschema",
-    "avro"
-  ],
   "author": {
     "name": "thedumbterminal",
     "email": "github@thedumbterminal.co.uk",
     "url": "http://www.thedumbterminal.co.uk"
   },
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/thedumbterminal/jsonschema-avro/issues"
-  },
   "licenses": [
     {
       "type": "MIT",
@@ -33,6 +29,17 @@
     }
   ],
   "homepage": "https://github.com/thedumbterminal/jsonschema-avro#readme",
+  "keywords": [
+    "json-schema",
+    "jsonschema",
+    "avro",
+    "avroschema",
+    "avro-schema"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intempt/json-to-avro-schema.git"
+  },
   "devDependencies": {
     "eslint": "^5.16.0",
     "mocha": "^5.2.0"

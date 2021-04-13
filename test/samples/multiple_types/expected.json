@@ -9,8 +9,8 @@
 			"name": "age",
 			"type": [
 				"null",
-				"float",
-				"int"
+				"double",
+				"long"
 			],
 			"default": null
 		}

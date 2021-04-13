@@ -18,6 +18,10 @@ To run json to avro schema converter use next command:
 
 `json-to-avro -j example.json -a avro.json`
 
+To include `"display": true` on all fields add:
+
+`-d true`
+
 ## Test
 
     npm test

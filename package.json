@@ -1,5 +1,5 @@
 {
-  "name": "build",
+  "name": "json-to-avro",
   "version": "1.0.0",
   "bin": {
     "json-to-avro": "./src/index.js"
@@ -39,6 +39,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/intempt/json-to-avro-schema.git"
+  },
+  "bugs": {
+    "url": "https://github.com/intempt/json-to-avro-schema/issues"
   },
   "devDependencies": {
     "eslint": "^5.16.0",

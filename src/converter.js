@@ -13,7 +13,7 @@ const typeMapping = {
 
 const reSymbol = /^[A-Za-z_][A-Za-z0-9_]*$/
 
-jsonSchemaAvro.convert = (jsonSchema) => {
+jsonSchemaAvro.convert = (jsonSchema, display = false) => {
     if (!jsonSchema) {
         throw new Error('No schema given')
     }
@@ -21,7 +21,7 @@ jsonSchemaAvro.convert = (jsonSchema) => {
         name: jsonSchemaAvro._idToName(jsonSchema.id) || 'main',
         type: 'record',
         doc: jsonSchema.description,
-        fields: jsonSchema.properties ? jsonSchemaAvro._convertProperties(jsonSchema.properties, jsonSchema.required) : []
+        fields: jsonSchema.properties ? jsonSchemaAvro._convertProperties(jsonSchema.properties, jsonSchema.required, display) : []
     }
     const nameSpace = jsonSchemaAvro._idToNameSpace(jsonSchema.id)
     if (nameSpace) {
@@ -72,26 +72,27 @@ jsonSchemaAvro._hasEnum = (schema) => Boolean(schema.enum)
 
 jsonSchemaAvro._isRequired = (list, item) => list.includes(item)
 
-jsonSchemaAvro._convertProperties = (schema = {}, required = []) => {
+jsonSchemaAvro._convertProperties = (schema = {}, required = [], display = false) => {
     return Object.keys(schema).map((item) => {
         if (jsonSchemaAvro._isComplex(schema[item])) {
-            return jsonSchemaAvro._convertComplexProperty(item, schema[item])
+            return jsonSchemaAvro._convertComplexProperty(item, schema[item], display)
         }
         else if (jsonSchemaAvro._isArray(schema[item])) {
-            return jsonSchemaAvro._convertArrayProperty(item, schema[item])
+            return jsonSchemaAvro._convertArrayProperty(item, schema[item], display)
         }
         else if (jsonSchemaAvro._hasEnum(schema[item])) {
-            return jsonSchemaAvro._convertEnumProperty(item, schema[item])
+            return jsonSchemaAvro._convertEnumProperty(item, schema[item], display)
         } else {
-            return jsonSchemaAvro._convertProperty(item, schema[item], jsonSchemaAvro._isRequired(required, item))
+            return jsonSchemaAvro._convertProperty(item, schema[item], jsonSchemaAvro._isRequired(required, item), display)
         }
     })
 }
 
 
-jsonSchemaAvro._convertEnumProperty = (name, contents) => {
+jsonSchemaAvro._convertEnumProperty = (name, contents, display = false) => {
     const prop = {
         name,
+        ...display === true && {display: true},
         doc: contents.description || '',
         type: contents.enum.every((symbol) => reSymbol.test(symbol))
             ? {
@@ -108,14 +109,15 @@ jsonSchemaAvro._convertEnumProperty = (name, contents) => {
 }
 
 
-jsonSchemaAvro._convertComplexProperty = (name, contents) => {
+jsonSchemaAvro._convertComplexProperty = (name, contents, display = false) => {
     return {
         name,
+        ...display === true && {display: true},
         doc: contents.description || '',
         type: {
             type: 'record',
             name: `${name}_record`,
-            fields: jsonSchemaAvro._convertProperties(contents.properties, contents.required)
+            fields: jsonSchemaAvro._convertProperties(contents.properties, contents.required, display)
         }
     }
 }
@@ -129,9 +131,10 @@ jsonSchemaAvro._convertComplexSubProperty = (name, contents) => {
 }
 
 
-jsonSchemaAvro._convertArrayProperty = (name, contents) => {
+jsonSchemaAvro._convertArrayProperty = (name, contents, display = false) => {
     return {
         name,
+        ...display === true && {display: true},
         doc: contents.description || '',
         type: {
             type: 'array',
@@ -139,9 +142,9 @@ jsonSchemaAvro._convertArrayProperty = (name, contents) => {
                 ? {
                     type: 'record',
                     name: `${name}_record`,
-                    fields: jsonSchemaAvro._convertProperties(contents.items.properties, contents.items.required)
+                    fields: jsonSchemaAvro._convertProperties(contents.items.properties, contents.items.required, display)
                 }
-                : jsonSchemaAvro._convertProperty(name, contents.items)
+                : jsonSchemaAvro._convertProperty(name, contents.items, display)
         }
     }
 }
@@ -160,10 +163,11 @@ jsonSchemaAvro._convertArraySubProperty = (name, contents) => {
     }
 }
 
-jsonSchemaAvro._convertProperty = (name, value, isRequired = false) => {
+jsonSchemaAvro._convertProperty = (name, value, isRequired = false, display = false) => {
 
     const prop = {
         name,
+        ...display === true && {display: true},
         doc: value.description || '',
     }
     let types = []

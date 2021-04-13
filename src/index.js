@@ -18,6 +18,11 @@ const argv = yargs
 		description: 'Input JSON schema file',
 		type: 'string',
 	})
+	.option('display', {
+		alias: 'd',
+		description: 'Enable display: true on all fields',
+		type: 'boolean',
+	})
 	.help()
 	.alias('help', 'h')
 	.argv;
@@ -36,7 +41,13 @@ console.log('\n\nStarting converting JSON schema to AVRO schema...');
 rawdata = fs.readFileSync(argv.json);
 schema = JSON.parse(rawdata);
 
-avro = converter.convert(schema)
+if (argv.display) {
+	avro = converter.convert(schema, argv.display)
+} else {
+	avro = converter.convert(schema)
+}
+
+
 data = JSON.stringify(avro, undefined, 4)
 fs.writeFile(argv.avro, data, function (err, result) {
 	if (err) console.log('Error', err);

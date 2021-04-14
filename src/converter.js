@@ -92,7 +92,7 @@ jsonSchemaAvro._convertProperties = (schema = {}, required = [], display = false
 jsonSchemaAvro._convertEnumProperty = (name, contents, display = false) => {
     const prop = {
         name,
-        ...display === true && {display: true},
+        ...display === true && { display: true },
         doc: contents.description || '',
         type: contents.enum.every((symbol) => reSymbol.test(symbol))
             ? {
@@ -102,7 +102,7 @@ jsonSchemaAvro._convertEnumProperty = (name, contents, display = false) => {
             }
             : 'string'
     }
-    if(contents.hasOwnProperty('default')){
+    if (contents.hasOwnProperty('default')) {
         prop.default = contents.default
     }
     return prop
@@ -112,7 +112,7 @@ jsonSchemaAvro._convertEnumProperty = (name, contents, display = false) => {
 jsonSchemaAvro._convertComplexProperty = (name, contents, display = false) => {
     return {
         name,
-        ...display === true && {display: true},
+        ...display === true && { display: true },
         doc: contents.description || '',
         type: {
             type: 'record',
@@ -132,34 +132,51 @@ jsonSchemaAvro._convertComplexSubProperty = (name, contents) => {
 
 
 jsonSchemaAvro._convertArrayProperty = (name, contents, display = false) => {
+    var items
+    if (jsonSchemaAvro._isComplex(contents.items) || jsonSchemaAvro._isComplexUnion(contents.items)) {
+        items = {
+            type: 'record',
+            name: `${name}_record`,
+            fields: jsonSchemaAvro._convertProperties(contents.items.properties, contents.items.required, display)
+        }
+    } else if (jsonSchemaAvro._isArray(contents.items) || jsonSchemaAvro._isArrayUnion(contents.items)) {
+        items = {
+            type: 'array',
+            items: jsonSchemaAvro._convertProperties(contents.items.items.properties, contents.items.required, display)
+        }
+    } else {
+        items = jsonSchemaAvro._convertProperty(name, contents.items, display)
+    }
     return {
         name,
-        ...display === true && {display: true},
+        ...display === true && { display: true },
         doc: contents.description || '',
         type: {
             type: 'array',
-            items: jsonSchemaAvro._isComplex(contents.items) || jsonSchemaAvro._isComplexUnion(contents.items)
-                ? {
-                    type: 'record',
-                    name: `${name}_record`,
-                    fields: jsonSchemaAvro._convertProperties(contents.items.properties, contents.items.required, display)
-                }
-                : jsonSchemaAvro._convertProperty(name, contents.items, display)
+            items: items
         }
     }
 }
 
 jsonSchemaAvro._convertArraySubProperty = (name, contents) => {
-
+    var items
+    if (jsonSchemaAvro._isComplex(contents.items) || jsonSchemaAvro._isComplexUnion(contents.items)) {
+        items = {
+            type: 'record',
+            name: `${name}_record`,
+            fields: jsonSchemaAvro._convertProperties(contents.items.properties, contents.items.required)
+        }
+    } else if (jsonSchemaAvro._isArray(contents.items) || jsonSchemaAvro._isArrayUnion(contents.items)) {
+        items = {
+            type: 'array',
+            items: jsonSchemaAvro._convertProperties(contents.items.properties, contents.items.required)
+        }
+    } else {
+        items = jsonSchemaAvro._convertProperty(name, contents.items)
+    }
     return {
         type: 'array',
-        items: jsonSchemaAvro._isComplex(contents.items) || jsonSchemaAvro._isComplexUnion(contents.items)
-            ? {
-                type: 'record',
-                name: `${name}_record`,
-                fields: jsonSchemaAvro._convertProperties(contents.items.properties, contents.items.required)
-            }
-            : jsonSchemaAvro._convertProperty(name, contents.items)
+        items: items
     }
 }
 
@@ -167,7 +184,7 @@ jsonSchemaAvro._convertProperty = (name, value, isRequired = false, display = fa
 
     const prop = {
         name,
-        ...display === true && {display: true},
+        ...display === true && { display: true },
         doc: value.description || '',
     }
     let types = []

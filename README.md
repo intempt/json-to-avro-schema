@@ -4,11 +4,7 @@ Converts JSON-schema definitions into Avro definitions.
 
 ## Install
 To run converter you need to have `npm` and `node` installed, and also need
-to install all dependencies using npm:
-
-`npm install url chalk figlet fs yargs`
-
-After installation all dependencies you can install CLI tool using with administrator rights:
+to install use next command with administrator rights:
 
 `npm install -g`
 

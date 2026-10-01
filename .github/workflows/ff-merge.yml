@@ -1,0 +1,15 @@
+name: ff-merge
+
+on:
+  pull_request_target:
+    types: [labeled]
+
+concurrency:
+  group: ff-merge-${{ github.repository }}
+
+jobs:
+  ff-merge:
+    if: github.event.label.name == 'ff-merge'
+    uses: intempt/.github/.github/workflows/ff-merge.yml@main
+    secrets:
+      FF_BOT_PRIVATE_KEY: ${{ secrets.FF_BOT_PRIVATE_KEY }}

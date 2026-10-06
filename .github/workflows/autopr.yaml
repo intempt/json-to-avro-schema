@@ -1,0 +1,30 @@
+name: Create Pull Request from Staging to Main
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  create_pr:
+    runs-on: intempt-ubuntu-github-runner
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run the Action
+        uses: devops-infra/action-pull-request@v0.5.5
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_branch: staging
+          target_branch: master
+          title: 'Merge Staging into Main'
+          body: 'Automatically created pull request to merge changes from staging into main.'
+          reviewer: ${{ vars.REVIEWERS }}
+          assignee: ${{ vars.REVIEWERS }}
+          draft: false
+          get_diff: true
+          ignore_users: "dependabot"
+          allow_no_diff: false

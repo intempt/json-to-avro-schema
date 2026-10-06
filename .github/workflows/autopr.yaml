@@ -7,7 +7,7 @@ on:
 
 jobs:
   create_pr:
-    runs-on: ubuntu-latest
+    runs-on: intempt-ubuntu-github-runner
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

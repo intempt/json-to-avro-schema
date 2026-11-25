@@ -1,0 +1,16 @@
+# CODEOWNERS — who approves a PR in this repo.
+#
+# Generated from The Merge Gate §02 (rev 2), the reviewed per-repo merge policy.
+# Repo write access does NOT equal merge rights. This file decides who approves.
+#
+#   lane      human always
+#   approvals 1
+#   primary   @Zeppier
+#   backup    @sidchaudhary
+#
+# Default owner for every path.
+*                       @Zeppier @sidchaudhary
+
+# CI and release surface. Changing what runs on merge changes the gate itself,
+# so it is listed explicitly rather than inherited from the default line.
+/.github/               @Zeppier @sidchaudhary
